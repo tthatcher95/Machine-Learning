@@ -24,11 +24,11 @@ Any violations will result in one or more of the following:
     for k=1 to max_neighbors, and for every test observation.
     Function arguments should be:
     - ~~problem dimensions: n_train_observations, n_test_observations, n_features.~~
-    ~~- maximum number of neighbors: max_neighbors.~~
-    ~~- a matrix training data inputs (n_train_observations x n_features).~~ 
-    ~~- a vector of training data outputs (n_train_observations).~~
-    ~~- a test input matrix (n_test_observations x n_features).~~
-    ~~- a matrix of predictions for the test data (n_test_observations x max_neighbors),
+    - ~~maximum number of neighbors: max_neighbors.~~
+    - ~~a matrix training data inputs (n_train_observations x n_features).~~ 
+    - ~~a vector of training data outputs (n_train_observations).~~
+    - ~~a test input matrix (n_test_observations x n_features).~~
+    - ~~a matrix of predictions for the test data (n_test_observations x max_neighbors),
       ~~which is where you need to store the result.~~
     Challenges:
     - ~~Use the L1/Manhattan distance 
