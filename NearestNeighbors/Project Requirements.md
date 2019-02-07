@@ -32,7 +32,7 @@ Any violations will result in one or more of the following:
       ~~which is where you need to store the result.~~
     Challenges:
     - ~~Use the L1/Manhattan distance 
-      ~~(instead of the L2/Euclidean distance which we saw in class).
+      (instead of the L2/Euclidean distance which we saw in class).~~
     - Make sure to define a header file with error codes.
       You should at least check that the problem dimensions and max number of neighbors are positive.
   - create an R package NearestNeighbors and code an interface for your C++ function in src/interface.cpp.
