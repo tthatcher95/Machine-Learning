@@ -11,10 +11,10 @@ Any violations will result in one or more of the following:
 - expulsion from NAU.
 
 *** Form a team with varied skills
-- ~~math/stats.
-- ~~R
-- ~~C++
-- ~~git/GitHub.
+- ~~math/stats.~~
+- ~~R~~
+- ~~C++~~
+- ~~git/GitHub.~~
 
 *** Coding two algorithms/functions.
 - nearest neighbors prediction function for regression and binary classification.
