@@ -3,4 +3,4 @@ NAU Class for Machine Learning
 
 Class Website
 
-![alt text](http://schedule.png)
+![alt text](https://github.com/tthatcher95/Machine-Learning/blob/master/schedule.png)
