@@ -23,7 +23,7 @@ Any violations will result in one or more of the following:
     then computes a matrix of k-nearest neighbor predictions,
     for k=1 to max_neighbors, and for every test observation.
     Function arguments should be:
-    ~~- problem dimensions: n_train_observations, n_test_observations, n_features.~~
+    - ~~problem dimensions: n_train_observations, n_test_observations, n_features.~~
     ~~- maximum number of neighbors: max_neighbors.~~
     ~~- a matrix training data inputs (n_train_observations x n_features).~~ 
     ~~- a vector of training data outputs (n_train_observations).~~
