@@ -31,7 +31,7 @@ Any violations will result in one or more of the following:
     - ~~a matrix of predictions for the test data (n_test_observations x max_neighbors), 
     	which is where you need to store the result.~~
     
-    **Challenges:
+    **Challenges**
     - ~~Use the L1/Manhattan distance 
       (instead of the L2/Euclidean distance which we saw in class).~~
     - Make sure to define a header file with error codes.
