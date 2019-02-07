@@ -1,4 +1,4 @@
-** Coding project 1: nearest neighbors for regression and binary classification.
+** Coding project 1: nearest neighbors for regression and binary classification.**
 
 For this project you will be writing an R package with C++ code
 that implements a version of the nearest neighbors algorithm.
@@ -10,13 +10,13 @@ Any violations will result in one or more of the following:
 - a failing grade in this class,
 - expulsion from NAU.
 
-*** Form a team with varied skills
+*** Form a team with varied skills ***
 - ~~math/stats.~~
 - ~~R~~
 - ~~C++~~
 - ~~git/GitHub.~~
 
-*** Coding two algorithms/functions.
+*** Coding two algorithms/functions.***
 - nearest neighbors prediction function for regression and binary classification.
   - write a C++ function NN1toKmaxPredict
     which takes a training data set and an entire test matrix,
