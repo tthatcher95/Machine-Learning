@@ -11,10 +11,10 @@ Any violations will result in one or more of the following:
 - expulsion from NAU.
 
 *** Form a team with varied skills
-- math/stats.
-- R
-- C++
-- git/GitHub.
+- ~~math/stats.
+- ~~R
+- ~~C++
+- ~~git/GitHub.
 
 *** Coding two algorithms/functions.
 - nearest neighbors prediction function for regression and binary classification.
@@ -29,10 +29,10 @@ Any violations will result in one or more of the following:
     ~~- a vector of training data outputs (n_train_observations).~~
     ~~- a test input matrix (n_test_observations x n_features).~~
     ~~- a matrix of predictions for the test data (n_test_observations x max_neighbors),
-      which is where you need to store the result.~~
+      ~~which is where you need to store the result.~~
     Challenges:
-    ~~- Use the L1/Manhattan distance 
-      (instead of the L2/Euclidean distance which we saw in class).~~
+    - ~~Use the L1/Manhattan distance 
+      ~~(instead of the L2/Euclidean distance which we saw in class).
     - Make sure to define a header file with error codes.
       You should at least check that the problem dimensions and max number of neighbors are positive.
   - create an R package NearestNeighbors and code an interface for your C++ function in src/interface.cpp.
