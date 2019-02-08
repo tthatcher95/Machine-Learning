@@ -5,7 +5,7 @@
 #include <iostream>
 #include "knn.h"
 
-int Predict1toMaxNeighbors(
+int NN1toKmaxPredict_C(
   // inputs
   double *train_inputs_ptr, double *train_label_ptr,
   int nrow, int ncol, int max_neighbors,
@@ -90,13 +90,13 @@ int main()
 
   double *test_prediction_ptr = new double[nrow];
 
-  Predict1toMaxNeighbors( train_inputs_ptr, train_label_ptr,
+  NN1toKmaxPredict_C( train_inputs_ptr, train_label_ptr,
                           nrow, ncol, max_neighbors,
                           test_input_ptr, test_prediction_ptr);
 
-  for(int i = 0; i < nrow; i++)
+  for(int i = 0; i < max_neighbors; i++)
   {
-    std::cout << "neighbor # prediction: " << test_prediction_ptr[i] << '\n';
+    std::cout << "neighbor "<< i + 1<< " prediction: " << test_prediction_ptr[i] << '\n';
   }
 
   return 0;

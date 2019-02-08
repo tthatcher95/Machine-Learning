@@ -1,4 +1,4 @@
-** Coding project 1: nearest neighbors for regression and binary classification.
+** Coding project 1: nearest neighbors for regression and binary classification.**
 
 For this project you will be writing an R package with C++ code
 that implements a version of the nearest neighbors algorithm.
@@ -10,28 +10,29 @@ Any violations will result in one or more of the following:
 - a failing grade in this class,
 - expulsion from NAU.
 
-*** Form a team with varied skills
-- math/stats.
-- R
-- C++
-- git/GitHub.
+*** Form a team with varied skills ***
+- ~~math/stats.~~
+- ~~R~~
+- ~~C++~~
+- ~~git/GitHub.~~
 
-*** Coding two algorithms/functions.
+*** Coding two algorithms/functions.***
 - nearest neighbors prediction function for regression and binary classification.
   - write a C++ function NN1toKmaxPredict
     which takes a training data set and an entire test matrix,
     then computes a matrix of k-nearest neighbor predictions,
     for k=1 to max_neighbors, and for every test observation.
     Function arguments should be:
-    ~~- problem dimensions: n_train_observations, n_test_observations, n_features.~~
-    ~~- maximum number of neighbors: max_neighbors.~~
-    ~~- a matrix training data inputs (n_train_observations x n_features).~~ 
-    ~~- a vector of training data outputs (n_train_observations).~~
-    ~~- a test input matrix (n_test_observations x n_features).~~
-    ~~- a matrix of predictions for the test data (n_test_observations x max_neighbors),
-      which is where you need to store the result.~~
-    Challenges:
-    ~~- Use the L1/Manhattan distance 
+    - ~~problem dimensions: n_train_observations, n_test_observations, n_features.~~
+    - ~~maximum number of neighbors: max_neighbors.~~
+    - ~~a matrix training data inputs (n_train_observations x n_features).~~ 
+    - ~~a vector of training data outputs (n_train_observations).~~
+    - ~~a test input matrix (n_test_observations x n_features).~~
+    - ~~a matrix of predictions for the test data (n_test_observations x max_neighbors), 
+    	which is where you need to store the result.~~
+    
+    **Challenges**
+    - ~~Use the L1/Manhattan distance 
       (instead of the L2/Euclidean distance which we saw in class).~~
     - Make sure to define a header file with error codes.
       You should at least check that the problem dimensions and max number of neighbors are positive.
