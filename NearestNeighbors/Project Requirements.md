@@ -36,11 +36,11 @@ Any violations will result in one or more of the following:
       (instead of the L2/Euclidean distance which we saw in class).~~
     - Make sure to define a header file with error codes.
       You should at least check that the problem dimensions and max number of neighbors are positive.
-  - create an R package NearestNeighbors and code an interface for your C++ function in src/interface.cpp.
+  - ~~create an R package NearestNeighbors and code an interface for your C++ function in src/interface.cpp.
     If your function returns an error code, make sure to
-    call error() with an informative message that will be displayed in R.
-  - code an R function NN1toKmaxPredict(X.mat, y.vec, testX.mat, max.neighbors)
-    that calls your C++ code via the .C function in R.
+    call error() with an informative message that will be displayed in R.~~
+  - ~~code an R function NN1toKmaxPredict(X.mat, y.vec, testX.mat, max.neighbors)
+    that calls your C++ code via the .C function in R.~~
   - write type/dimension checking code in the beginning of that function,
     and stop() with an informative error message if there are any issues.
   - write documentation for that R function,
