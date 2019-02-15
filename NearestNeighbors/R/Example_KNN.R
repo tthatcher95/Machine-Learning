@@ -8,3 +8,4 @@ testy <- zip.train[6, 1]
 
 # if the below line is uncommented then it fails to build dont know why
 #.C("NN1toKmaxPredict", as.double(x), as.double(y), as.integer(nrow(x)), as.integer(ncol(x)), as.integer(max_neighbors), as.double(testx), as.double(ret), PACKAGE="nearestNeighbors")
+testy
