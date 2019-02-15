@@ -28,7 +28,7 @@ void NN1toKmaxPredict(double *train_inputs_ptr, double *train_label_ptr,
 
 // Code required to register the interface function with R.
 R_CMethodDef cMethods[] = {
-  {"my_mean_interface", (DL_FUNC) &my_mean_interface, 3},
+  {"NN1toKmaxPredict", (DL_FUNC) &NN1toKmaxPredict, 3},
   {NULL, NULL, 0}
 };
 extern "C" {
@@ -37,6 +37,6 @@ extern "C" {
     //R_useDynamicSymbols call says the DLL is not to be searched for
     //entry points specified by character strings so .C etc calls will
     //only find registered symbols.
-    R_useDynamicSymbols(info, FALSE);
+    R_useDynamicSymbols(info, TRUE);
   }
 }
