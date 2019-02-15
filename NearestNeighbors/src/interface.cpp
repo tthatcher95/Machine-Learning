@@ -3,17 +3,17 @@
 #include "knn.h"
 
 void NN1toKmaxPredict(double *train_inputs_ptr, double *train_label_ptr,
-                      int *nrow, int *ncol, int *max_neighbors,
+                      int *n_observations, int *n_features, int *max_neighbors,
                       double *test_input_ptr,
                       double *test_prediction_ptr) {
 
   int status = NN1toKmaxPredict_C(train_inputs_ptr, train_label_ptr,
-                                  *nrow, *ncol, *max_neighbors,
+                                  *n_observations, *n_features, *max_neighbors,
                                   test_input_ptr,
                                   test_prediction_ptr);
 
   if(status == ERROR_TOO_MANY_NEIGHBORS){
-      error("too many neighbors (should be at most nrow)");
+      error("too many neighbors (should be at most n_observations)");
   }
   if(status == ERROR_TOO_FEW_NEIGHBORS){
     error("too few neighbors (should be at least 1)");

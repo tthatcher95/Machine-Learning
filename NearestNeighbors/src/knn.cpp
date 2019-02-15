@@ -8,8 +8,8 @@
 int NN1toKmaxPredict_C(
   // inputs
   double *train_inputs_ptr, double *train_label_ptr,
-  int nrow, int ncol, int max_neighbors,
-  double *test_input_ptr, // ncol
+  int n_observations, int n_features, int max_neighbors,
+  double *test_input_ptr, // n_features
   // output
   double *test_prediction_ptr) // max_neighbors
   {
@@ -20,17 +20,31 @@ int NN1toKmaxPredict_C(
     // MatrixXd(n, p)
     // MatrixXi
 
-    Eigen::VectorXd distance_vec(nrow);
-    Eigen::Map< Eigen::MatrixXd > train_inputs_mat(train_inputs_ptr, nrow, ncol);
-    Eigen::Map< Eigen::VectorXd > test_input_vec(test_input_ptr, ncol);
-    Eigen::VectorXi sorted_index_vec(nrow);
+    Eigen::VectorXd distance_vec(n_observations);
+    Eigen::Map< Eigen::MatrixXd > train_inputs_mat(train_inputs_ptr, n_observations, n_features);
+    Eigen::Map< Eigen::VectorXd > test_input_vec(test_input_ptr, n_features);
+    Eigen::VectorXi sorted_index_vec(n_observations);
+
+    // error checking
+    if ( max_neighbors > n_observations ) {
+      return ERROR_TOO_MANY_NEIGHBORS;
+    }
+    if ( max_neighbors < 1 ) {
+      return ERROR_TOO_FEW_NEIGHBORS;
+    }
+    if ( train_inputs_mat.size() == 0 ) {
+      return ERROR_NO_TRAIN_DATA;
+    }
+    if ( test_input_vec.size() == 0) {
+      return ERROR_NO_TEST_DATA;
+    }
 
     int row = 0;
     int neighbors = 0;
     double total_labels = 0;
 
     // Step 1: Compute Distances
-    for(int i=0; i<nrow; i++) {
+    for(int i=0; i<n_observations; i++) {
       distance_vec(i) = (train_inputs_mat.row(i).transpose()-test_input_vec).array().abs().sum();
       sorted_index_vec(i) = i;
     }
@@ -67,38 +81,38 @@ int NN1toKmaxPredict_C(
 
 int main()
 {
-  int nrow = 3;
-  int ncol = 2;
-  int max_neighbors = 3;
-  int n = nrow * ncol;
-
-  double *train_inputs_ptr = new double[n];
-  for (int i = 0; i < n; i+= 1)
-  {
-    train_inputs_ptr[i] = double(i + 1.0);
-  }
-  double *train_label_ptr = new double[nrow];
-  for (int i = 0; i < nrow; i+= 1)
-  {
-    train_label_ptr[i] = double(i + 1);
-  }
-  double *test_input_ptr = new double[ncol];
-
-  for (int i = 0; i < ncol; i+= 1) {
-    test_input_ptr[i] = double(i + 1.5);
-  }
-
-
-  double *test_prediction_ptr = new double[nrow];
-
-  NN1toKmaxPredict_C( train_inputs_ptr, train_label_ptr,
-                          nrow, ncol, max_neighbors,
-                          test_input_ptr, test_prediction_ptr);
-
-  for(int i = 0; i < max_neighbors; i++)
-  {
-    std::cout << "neighbor "<< i + 1<< " prediction: " << test_prediction_ptr[i] << '\n';
-  }
+  // int n_observations = 3;
+  // int n_features = 2;
+  // int max_neighbors = 3;
+  // int n = n_observations * n_features;
+  //
+  // double *train_inputs_ptr = new double[n];
+  // for (int i = 0; i < n; i+= 1)
+  // {
+  //   train_inputs_ptr[i] = double(i + 1.0);
+  // }
+  // double *train_label_ptr = new double[n_observations];
+  // for (int i = 0; i < n_observations; i+= 1)
+  // {
+  //   train_label_ptr[i] = double(i + 1);
+  // }
+  // double *test_input_ptr = new double[n_features];
+  //
+  // for (int i = 0; i < n_features; i+= 1) {
+  //   test_input_ptr[i] = double(i + 1.5);
+  // }
+  //
+  //
+  // double *test_prediction_ptr = new double[n_observations];
+  //
+  // NN1toKmaxPredict_C( train_inputs_ptr, train_label_ptr,
+  //                         n_observations, n_features, max_neighbors,
+  //                         test_input_ptr, test_prediction_ptr);
+  //
+  // for(int i = 0; i < max_neighbors; i++)
+  // {
+  //   std::cout << "neighbor "<< i + 1<< " prediction: " << test_prediction_ptr[i] << '\n';
+  // }
 
   return 0;
 }
