@@ -33,7 +33,7 @@ R_CMethodDef cMethods[] = {
 };
 
 extern "C" {
-  void R_init_nearestNeighbors(DllInfo *info) {
+  void R_init_NearestNeighbors(DllInfo *info) {
     R_registerRoutines(info, cMethods, NULL, NULL, NULL);
     R_useDynamicSymbols(info, FALSE);
   }

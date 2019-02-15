@@ -1,9 +1,14 @@
-Package: nearestNeighbors
+Package: NearestNeighbors
 Type: Package
-Title: nearest neighbors
+Title: Nearest Neighbors
 Version: 2019.02.14
 Author: Cole Neubauer
 Maintainer: Cole Neubauer <cole@nau.edu>
-Description: Nearest Neighborsalgorithm implementation
+Description: Nearest Neighbors Algorithm implementation
 License: GPL-3
+Encoding: UTF-8
+LazyData: true
 LinkingTo: RcppEigen
+RoxygenNote: 6.1.0
+Imports: data.table
+Suggests: ggplot2

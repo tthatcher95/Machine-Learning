@@ -40,12 +40,13 @@ int NN1toKmaxPredict_C(
 
     // Step 2: Sort Indicies based on Indicies
     std::sort(sorted_index_vec.data(), // Gets first element in sorted_index_vec
-              sorted_index_vec.data() + sorted_index_vec.size()), // Gets last element in sorted_index_vec
+              sorted_index_vec.data() + sorted_index_vec.size(), // Gets last element in sorted_index_vec
 
               // Lambda Function to sort based on distances
               [&distance_vec](int left, int right) {
                 return distance_vec(left) < distance_vec(right);
-              };
+              }
+    );
     // Print after sorting
     // std::cout << sorted_index_vec << std::endl;
 
