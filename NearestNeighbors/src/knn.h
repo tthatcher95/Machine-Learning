@@ -4,7 +4,7 @@
 #define ERROR_NO_TEST_DATA 4
 
 int NN1toKmaxPredict_C(  double *train_inputs_ptr, double *train_label_ptr,
-                         int nrow, int ncol, int max_neighbors,
+                         int n_observations, int n_features, int max_neighbors,
                          double *test_input_ptr,
                          double *test_prediction_ptr);
 

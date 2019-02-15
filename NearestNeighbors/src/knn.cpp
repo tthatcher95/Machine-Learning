@@ -19,7 +19,7 @@ int NN1toKmaxPredict_C(
     // VectorXi
     // MatrixXd(n, p)
     // MatrixXi
-
+    
     Eigen::VectorXd distance_vec(nrow);
     Eigen::Map< Eigen::MatrixXd > train_inputs_mat(train_inputs_ptr, nrow, ncol);
     Eigen::Map< Eigen::VectorXd > test_input_vec(test_input_ptr, ncol);
