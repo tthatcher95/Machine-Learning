@@ -3,12 +3,12 @@
 #include "knn.h"
 
 void NN1toKmaxPredict(double *train_inputs_ptr, double *train_label_ptr,
-                      int nrow, int ncol, int max_neighbors,
+                      int *nrow, int *ncol, int *max_neighbors,
                       double *test_input_ptr,
                       double *test_prediction_ptr) {
 
   int status = NN1toKmaxPredict_C(train_inputs_ptr, train_label_ptr,
-                                  nrow, ncol, max_neighbors,
+                                  *nrow, *ncol, *max_neighbors,
                                   test_input_ptr,
                                   test_prediction_ptr);
 
@@ -28,15 +28,13 @@ void NN1toKmaxPredict(double *train_inputs_ptr, double *train_label_ptr,
 
 // Code required to register the interface function with R.
 R_CMethodDef cMethods[] = {
-  {"NN1toKmaxPredict", (DL_FUNC) &NN1toKmaxPredict, 3},
+  {"NN1toKmaxPredict", (DL_FUNC) &NN1toKmaxPredict, 7},
   {NULL, NULL, 0}
 };
+
 extern "C" {
-  void R_init_NearestNeighbors(DllInfo *info) { // Make sure it is R_init_yourPackageName
+  void R_init_nearestNeighbors(DllInfo *info) {
     R_registerRoutines(info, cMethods, NULL, NULL, NULL);
-    //R_useDynamicSymbols call says the DLL is not to be searched for
-    //entry points specified by character strings so .C etc calls will
-    //only find registered symbols.
-    R_useDynamicSymbols(info, TRUE);
+    R_useDynamicSymbols(info, FALSE);
   }
 }

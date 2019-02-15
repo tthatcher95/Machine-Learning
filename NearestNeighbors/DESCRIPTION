@@ -1,0 +1,9 @@
+Package: nearestNeighbors
+Type: Package
+Title: nearest neighbors
+Version: 2019.02.14
+Author: Cole Neubauer
+Maintainer: Cole Neubauer <cole@nau.edu>
+Description: Nearest Neighborsalgorithm implementation
+License: GPL-3
+LinkingTo: RcppEigen
