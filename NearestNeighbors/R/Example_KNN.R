@@ -9,9 +9,15 @@ testy <- zip.train[6, 1]
 fold <- vector()
 
 # if the below line is uncommented then it fails to build dont know why
-NN1toMaxPredict_func <- function(x, y, max_neighbors, testx, ret) {
-  .C("NN1toKmaxPredict", as.double(x), as.double(y), as.integer(nrow(x)), as.integer(ncol(x)), as.integer(max_neighbors), as.double(testx), as.double(ret), PACKAGE="NearestNeighbors")
+NN1toMaxPredict_func <- function(x, y, max_neighbors, testx) {
+  res <- .C("NN1toKmaxPredict", as.double(x), as.double(y), as.integer(nrow(x)), as.integer(ncol(x)), as.integer(max_neighbors), as.double(testx), test.predictions=double(max_neighbors), PACKAGE="NearestNeighbors")
+  res$test.predictions
   }
+
+NN1toMaxPredictMatrix_func <- function(x, y, max_neighbors, testx) {
+  res <- .C("NN1toKmaxMatrixPredict", as.double(x), as.double(y), as.integer(nrow(x)), as.integer(ncol(x)), as.integer(max_neighbors), as.double(testx), test.predictions=double(max_neighbors), PACKAGE="NearestNeighbors")
+  res$test.predictions
+}
 
 NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5) {
   if(is.null(fold.vec)) {
@@ -29,7 +35,7 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5) 
     }
     ret <- vector(mode="double", length=max_neighbors)
     for(row in c(data.train, data.test)){
-      NN1toMaxPredict_func(x, y, max_neighbors, testx, ret)
+      NN1toMaxPredict_func(x, y, max_neighbors, testx)
       #pred.mat <- ret
       #print(pred.mat)
       loss.mat <- if(all(y <= 1)) {

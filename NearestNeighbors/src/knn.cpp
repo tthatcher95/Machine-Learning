@@ -5,11 +5,30 @@
 #include <iostream>
 #include "knn.h"
 
+
+int NN1toKmaxMatPredict_C(
+  // inputs
+  double *train_inputs_ptr, double *train_label_ptr,
+  int n_observations, int n_features, int max_neighbors,
+  double *test_inputs_ptr,
+  // output
+  double *test_predictions_ptr)
+  {
+    Eigen::Map< Eigen::MatrixXd > test_predictions_mat(test_predictions_ptr, max_neighbors, n_observations);
+    Eigen::Map< Eigen::MatrixXd > test_inputs_mat(test_inputs_ptr, n_features, n_observations);
+
+    for (int i = 0; i < n_observations; i++) {
+      NN1toKmaxPredict_C(train_inputs_ptr, train_label_ptr, n_observations, n_features, max_neighbors, test_inputs_mat.col(i).data(), test_predictions_mat.col(i).data());
+    }
+  }
+
+
+
 int NN1toKmaxPredict_C(
   // inputs
   double *train_inputs_ptr, double *train_label_ptr,
   int n_observations, int n_features, int max_neighbors,
-  double *test_input_ptr, // n_features
+  double * test_input_ptr, // n_features
   // output
   double *test_prediction_ptr) // max_neighbors
   {
