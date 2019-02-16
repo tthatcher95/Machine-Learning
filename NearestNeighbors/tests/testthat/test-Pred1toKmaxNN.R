@@ -3,6 +3,7 @@ library(testthat)
 context("knn")
 
 test_that("C++ computes same answer as R", {
+  
   data(zip.train, package="ElemStatLearn")
   x <- zip.train[1:5, -1]
   y <- zip.train[1:5, 1]
@@ -20,10 +21,33 @@ test_that("C++ computes same answer as R", {
   expect_equal(pred.vec, expected_prediction)
   })
 
-
-test_that("valid input gets valid output", {
+test_that("valid input gets valid output",{ 
   # (1) for a valid input (one of the data sets mentioned below), 
   # your function returns a valid numeric prediction matrix with the expected dimensions
+  data(zip.train, package="ElemStatLearn")
+  x <- zip.train[, -1]
+  y <- zip.train[, 1]
+  max.neighbors = 3 
+  
+  trainx <- zip.train[0:100, -1]
+  trainx <- trainx
+  trainy <- zip.train[0:100, 1]
+  testx <- zip.train[101:111, -1]
+
+  pred.matrix <- NN1toMaxPredictMatrix_func(trainx, trainy, max.neighbors, testx)
+  pred.matrix
+  # is matrix
+  expect_equal(is.matrix(pred.matrix), TRUE)
+  # has numbers
+  expect_equal(all(is.numeric(pred.matrix)), TRUE)
+  # expected cols
+  expect_equal(ncol(pred.matrix), max.neighbors)
+  # expected rows
+  expect_equal(nrow(pred.matrix), nrow(testx))
+  })
+
+test_that("invalid input, should stop", {
+  # (2) for an invalid input, your function stops with an informative error message.
   data(zip.train, package="ElemStatLearn")
   x <- zip.train[, -1]
   y <- zip.train[, 1]
@@ -32,16 +56,8 @@ test_that("valid input gets valid output", {
   trainx <- trainx
   trainy <- zip.train[0:100, 1]
   testx <- zip.train[101:111, -1]
-  nrow(testx)
-  trainx
-  testx
-  max.neighbors = 3
-  pred.matrix <- matrix(0, nrow = nrow(testx), ncol = max.neighbors)
-  pred.matrix
-  pred.matrix <- NN1toMaxPredictMatrix_func(trainx, trainy, max.neighbors, testx)
-  pred.matrix
-  })
 
-test_that("should not fail", {
-  expect_equal(1, 1)
+  # the 4000000 neighbors is invalid
+  invalid_neighbors = 4000000
+  expect_error(NN1toMaxPredictMatrix_func(trainx, trainy, invalid_neighbors, testx))
 })
