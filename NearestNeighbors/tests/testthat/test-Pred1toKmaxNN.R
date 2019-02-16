@@ -44,6 +44,28 @@ test_that("valid input gets valid output",{
   expect_equal(ncol(pred.matrix), max.neighbors)
   # expected rows
   expect_equal(nrow(pred.matrix), nrow(testx))
+  
+  data(ozone, package="ElemStatLearn")
+  
+  # Ozone
+  x <- ozone[, -1]
+  y <- ozone[, 1]
+  max.neighbors = 3 
+  
+  trainx <- as.matrix(ozone[0:100, -1])
+  trainy <- ozone[0:100, 1]
+  testx <- as.matrix(ozone[101:111, -1])
+  
+  pred.matrix <- NN1toMaxPredictMatrix_func(trainx, trainy, max.neighbors, testx)
+  pred.matrix
+  # is matrix
+  expect_equal(is.matrix(pred.matrix), TRUE)
+  # has numbers
+  expect_equal(all(is.numeric(pred.matrix)), TRUE)
+  # expected cols
+  expect_equal(ncol(pred.matrix), max.neighbors)
+  # expected rows
+  expect_equal(nrow(pred.matrix), nrow(testx))
   })
 
 test_that("invalid input, should stop", {
