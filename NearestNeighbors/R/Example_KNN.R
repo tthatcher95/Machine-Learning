@@ -69,14 +69,16 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5) 
       pred.mat <- NN1toMaxPredictMatrix_func(
       train.features, train.labels,
       max.neighbors, validation.features)
-      is.matrix(validation.features)
+      is.matrix(X.mat)
       pred.mat
       
+      set.list <- list(train=train.features, validation=!train.features)
+      
       for(set.name in names(set.list)){
-        is.set <- set.list[[set.name]]
-        print(is.set)
-        set.pred.mat <- pred.mat[is.set]
-        set.label.vec <- data.test[is.set]
+        # is.set <- set.list[[set.name]]
+        # print(is.set)
+        # set.pred.mat <- pred.mat[is.set,]
+        # set.label.vec <- data.test[is.set]
 
         if(all(y == 1 || y == 0)) {
           loss.mat <- ifelse(pred.mat > 0.5, 1, 0) != validation.labels #zero-one loss for binary classification.
@@ -87,11 +89,10 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5) 
         train.loss.mat[fold.i, ] <- colMeans(as.matrix(loss.mat))
       }
   }
-  train.loss.mat
+  min(train.loss.mat)
   }
   
-
-#NNLearnCV(x, y)
+NNLearnCV(new_x, y)
 
 
 
