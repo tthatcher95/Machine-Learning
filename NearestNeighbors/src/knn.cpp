@@ -9,7 +9,7 @@
 int NN1toKmaxMatPredict_C(
   // inputs
   double *train_inputs_ptr, double *train_label_ptr,
-  int n_observations, int n_features, int max_neighbors,
+  int n_observations, int n_features, int max_neighbors, int n_test,
   double *test_inputs_ptr,
   // output
   double *test_predictions_ptr)
@@ -17,8 +17,10 @@ int NN1toKmaxMatPredict_C(
     Eigen::Map< Eigen::MatrixXd > test_predictions_mat(test_predictions_ptr, max_neighbors, n_observations);
     Eigen::Map< Eigen::MatrixXd > test_inputs_mat(test_inputs_ptr, n_features, n_observations);
 
-    for (int i = 0; i < n_observations; i++) {
+    for (int i = 0; i < n_test; i++) {
       NN1toKmaxPredict_C(train_inputs_ptr, train_label_ptr, n_observations, n_features, max_neighbors, test_inputs_mat.col(i).data(), test_predictions_mat.col(i).data());
+      // std::cout<< test_inputs_mat.row(i) << std::endl;
+      // std::cout<< test_predictions_mat << std::endl;
     }
   }
 
@@ -92,7 +94,6 @@ int NN1toKmaxPredict_C(
 
       // Total/k
       test_prediction_ptr[k] = total_labels/neighbors;
-
     }
     return 0;
   }

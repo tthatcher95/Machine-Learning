@@ -10,6 +10,6 @@ int NN1toKmaxPredict_C(  double *train_inputs_ptr, double *train_label_ptr,
 
 int NN1toKmaxMatPredict_C(
                          double *train_inputs_ptr, double *train_label_ptr,
-                         int n_observations, int n_features, int max_neighbors,
+                         int n_observations, int n_features, int max_neighbors, int n_test,
                          double *test_inputs_ptr,
                          double *test_predictions_ptr);
