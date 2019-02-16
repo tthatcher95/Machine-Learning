@@ -49,73 +49,47 @@ NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5) 
     stop("Vectors 'y.vec'  and 'fold.vec' must be same length.")
   }
   
-  train.loss.mat <- matrix(0, nrow = length(x), ncol = max.neighbors)
-  validation.loss.mat <- matrix(0, nrow = length(x), ncol = max.neighbors)
+  train.loss.mat <- matrix(0, nrow = n.folds, ncol = max.neighbors)
+  validation.loss.mat <- matrix(0, nrow = n.folds, ncol = max.neighbors)
 
-  for(fold.i in seq_along((fold.vec))){
+  for(fold.i in 1:n.folds){
       test.i <- which(fold.vec == fold.i, arr.ind=TRUE)  
-      
+      fold.i
       train.features <- matrix(X.mat[-test.i, ], nrow = nrow(X.mat) - length(test.i), ncol(X.mat))
       nrow(train.features)
       ncol(train.features)
       is.matrix(train.features)
       train.labels <- y.vec[-test.i]
+      y.vec[-test.i]
+      test.i
+      train.labels
       
       validation.features <- matrix(X.mat[test.i], nrow = length(test.i), ncol = ncol(X.mat))
-      nrow(validation.features)
-      ncol(validation.features)
-      
       validation.labels <- y.vec[test.i]
-      
-      nrow(validation.features)
       pred.mat <- NN1toMaxPredictMatrix_func(
       train.features, train.labels,
       max.neighbors, validation.features)
       is.matrix(validation.features)
       pred.mat
-      # 
-      # loss.mat <- if(all(y == 1 || y == 0)) {
-      #   ifelse(pred.mat > 0.5, 1, 0) != set.label.vec #zero-one loss for binary classification.
-      # }
-      # 
-      # else {
-      #   (pred.mat - set.label.vec)^2 #square loss for regression.
-      # }
-      # 
-      # train.loss.mat[fold.i] <- colMeans(as.matrix(loss.mat))
-  }
-      # ifelse(pred.mat>0.5, 1, 0) != y.vec #zero-one loss for binary classification.
-      # }else{
-      #   (pred.mat-y.vec)^2 #square loss for regression.
-      # }
-      # train.or.validation.loss.mat[, fold.i] <- colMeans(loss.mat)
-  }
-  # for(fold.i in seq_along(which(fold.vec != validation_num))) {
-  #   fold <- which(fold.vec == fold.i)
-  #   data.train <- x[fold,]
-  #   data.train
-  #   data.test <- y[fold]
-  #   pred.mat <- NN1toMaxPredictMatrix_func(data.train, data.test, max_neighbors, testx)
-  #   set.list <- list(train=data.train, validation=!data.train)
-  #   
-  #   for(set.name in names(set.list)){
-  #     is.set <- set.list[[set.name]]
-  #     print(is.set)
-  #     set.pred.mat <- pred.mat[is.set]
-  #     set.label.vec <- data.test[is.set]
-  #     
-  #     loss.mat <- if(all(y == 1 || y == 0)) {
-  #       ifelse(pred.mat > 0.5, 1, 0) != set.label.vec #zero-one loss for binary classification.
-  #     }
-  #     
-  #     else {
-  #       (pred.mat - set.label.vec)^2 #square loss for regression.
-  #     }
-  #     
-  #     train.loss.mat[fold.i] <- colMeans(as.matrix(loss.mat))
-  #   }
-  # }
+      
+      for(set.name in names(set.list)){
+        is.set <- set.list[[set.name]]
+        print(is.set)
+        set.pred.mat <- pred.mat[is.set]
+        set.label.vec <- data.test[is.set]
 
+        if(all(y == 1 || y == 0)) {
+          loss.mat <- ifelse(pred.mat > 0.5, 1, 0) != validation.labels #zero-one loss for binary classification.
+        } else {
+          loss.mat <- (pred.mat - validation.labels)^2 #square loss for regression.
+        }
+        
+        train.loss.mat[fold.i, ] <- colMeans(as.matrix(loss.mat))
+      }
+  }
+  train.loss.mat
+  }
+  
 
 #NNLearnCV(x, y)
 
