@@ -37,35 +37,48 @@ NN1toMaxPredictMatrix_func <- function(trainx, trainy, max.neighbors, testx) {
   matrix(res$test.predictions, nrow(testx), max.neighbors, byrow=TRUE)
 }
 
-
 NNLearnCV <- function(X.mat, y.vec, max.neighbors=30, fold.vec=NULL, n.folds=5) {
   if(is.null(fold.vec)) {
     fold.vec <- sample(rep(1:n.folds, l=nrow(X.mat)))
   }
-
+  
   if(!all(length(y.vec)==length(fold.vec))) {
     stop("Vectors 'y.vec'  and 'fold.vec' must be same length.")
   }
-    validation_num <- sample(1:n.folds, 1)
-    for(fold.i in seq_along(unique(unlist(fold.vec, use.names = FALSE)))) {
-      fold <- which(fold.vec == fold.i)
-      data.train <- x[-fold,]
-      data.test <- x[fold,]
-    }
-    ret <- vector(mode="double", length=max_neighbors)
-    for(row in c(data.train, data.test)){
-      NN1toMaxPredict_func(x, y, max_neighbors, testx)
-      #pred.mat <- ret
-      #print(pred.mat)
-      loss.mat <- if(all(y <= 1)) {
-        ifelse(pred.mat > 0.5, 1, 0) != y.vec #zero-one loss for binary classification.
+  
+  train.loss.mat <- matrix(, nrow = length(x), ncol = max.neighbors)
+  validation.loss.mat <- matrix(, nrow = length(x), ncol = max.neighbors)
+  
+  validation_num <- sample(1:n.folds, 1)
+  
+  for(fold.i in seq_along(which(fold.vec != validation_num))) {
+    fold <- which(fold.vec == fold.i)
+    data.train <- x[fold,]
+    data.test <- y[fold]
+    pred.mat <- NN1toMaxPredictMatrix_func(data.train, data.test, max_neighbors, testx)
+    set.list <- list(train=data.train, validation=!data.train)
+    for(set.name in names(set.list)){
+      is.set <- set.list[[set.name]]
+      print(is.set)
+      set.pred.mat <- pred.mat[is.set,]
+      set.label.vec <- data.test[is.set]
+      loss.mat <- if(all(y == 1 || y == 0)) {
+        ifelse(pred.mat > 0.5, 1, 0) != set.label.vec #zero-one loss for binary classification.
       }
       else {
-        #(pred.mat - y.vec)^2 #square loss for regression.
+        (pred.mat - set.label.vec)^2 #square loss for regression.
       }
-      #overall.loss.mat[, fold.i] <- colMeans(as.matrix(loss.mat))
-
+      
+      train.loss.mat[fold.i] <- colMeans(as.matrix(loss.mat))
     }
+  }
 }
 
 #NNLearnCV(x, y)
+
+
+
+
+
+
+
