@@ -33,7 +33,7 @@ test_that("valid input gets valid output",{
   trainx <- trainx
   trainy <- zip.train[0:100, 1]
   testx <- zip.train[101:111, -1]
-
+  
   pred.matrix <- NN1toMaxPredictMatrix_func(trainx, trainy, max.neighbors, testx)
   pred.matrix
   # is matrix
