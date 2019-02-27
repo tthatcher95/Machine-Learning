@@ -18,7 +18,7 @@ By now you know how to code functions in C++ or R so you have the choice.
 ** Linear models with early stopping regularization
 R Function names: LMSquareLossIterations, LMLogisticLossIterations
 - Inputs: X.mat (feature matrix, n_train x n_features), y.vec (label vector, n_train x 1), max.iterations (int scalar > 1), step.size.
-- Output: W.mat, matrix of weight vectors, one for each iteration, n_features x max.iterations.
+- Output: W.mat, matrix of weight vectors, one for each iteration, n_features+1 x max.iterations. (the first element of the weight vector should be the intercept term).
   Should be able to get a matrix of predictions via X.mat %*% W.mat
 - there should be one function for the square loss, one function for the logistic loss.
 - both functions should optimize the mean loss (not the total loss).
@@ -42,7 +42,7 @@ R Function names: LMSquareLossEarlyStoppingCV, LMLogisticLossEarlyStoppingCV
 
 ** Linear models with L2 regularization
 R Function names: LMSquareLossL2, LMLogisticLossL2.
-- Inputs: X.scaled.mat, y.vec, penalty (non-negative numeric scalar), opt.thresh (positive numeric scalar), initial.weight.vec.
+- Inputs: X.scaled.mat, y.vec, penalty (non-negative numeric scalar), opt.thresh (positive numeric scalar), initial.weight.vec, step.size.
 - these functions should assume that X.scaled.mat already has mean=0 and sd=1 for each of its columns,
   and its job is to find the optimal weight vector that minimizes the following cost function:
   \sum_{i=1}^n L[w^T x_i, y_i] + penalty * ||w||, where L is either the logistic or square loss.
@@ -54,8 +54,10 @@ R Function names: LMSquareLossL2penalties, LMLogisticLossL2penalties.
 - Inputs: X.mat, y.vec, penalty.vec (vector of decreasing penalty values)
 - this function should begin by scaling X.mat to obtain X.scaled.mat with each column mean=0 and sd=1
 - it should then loop over penalty values, calling LM__LossL2 to get the optimal weight vector for each.
-- Output: W.mat (n_features x n_penalties), weight matrix on original scale,
-  that can be used to get predictions via X.mat %*% W.mat
+- use warm restarts, i.e. instead of starting the optimization from the 0 vector each time (slow), use the optimal solution for the previous penalty value as the next initial.weight.vec (faster).
+- Output: W.mat (n_features+1 x n_penalties), weight matrix on original scale,
+  that can be used to get predictions via cbind(1, X.mat) %*% W.mat
+  (the first row of W.mat should be the bias/beta/intercept)
 R Function names: LMSquareLossL2CV, LMLogisticLossL2CV.
 - Inputs: X.mat, y.vec, fold.vec, penalty.vec
 - should use K-fold cross-validation based on the fold IDs provided in fold.vec
@@ -168,11 +170,40 @@ Extra credit:
     and have a green badge that indicates a build that passes checks.
     See [[https://juliasilge.com/blog/beginners-guide-to-travis/][blog]]
     and [[https://docs.travis-ci.com/user/languages/r/][docs]].
-  - if you submit your work early you will get feedback from me and extra credit:
-    - First week: 10 points if you have written all R functions described above by Fri Feb 22. (1 point per function)
-    - Second week: 10 more points if you have started your report by Fri Mar 1 --
-      please send me your rendered html report by email.
+  - if you submit your work early (to me via email) you will get feedback from me and extra credit:
+    - First week: 10 points if you have written all R functions described above, and you email me with a link to your github repo by Tuesday Feb 26. (1 point per function)
+    - Second week: 10 more points if you have started your report, and you email me with the rendered HTML report as an attachment by Fri Mar 1.
       You will get 2 points of extra credit for the analysis of each data set
       (1 point for plots of train/validation loss versus regularization parameter,
       1 point for 4-fold CV loss matrix table/plot).
     - Third week: do tests/docs, finish report, make sure package passes R CMD check with no WARNING/ERROR on win-builder.
+
+** FAQ
+- what is the difference if I use the total loss instead of the mean loss?  Will the training result change?
+The total loss is the sum of the loss over all training data points.
+The mean loss is the sum divided by the number of data points.
+It should not make a difference theoretically but numerically (on computers) it is usually better to use the mean.
+
+- For the learned weight vector, should there be n_features elements? Or n_features+1? there should be n_features+1 because of the intercept/bias/beta. Please make the intercept the first element of the weight vector
+
+- What is the opt.thresh variable? It is an optimality threshold, a positive real number that controls when to stop and declare that a particular weight vector is "optimal" numerically. Smaller values closer to zero mean closer to the actual optimum, and typically more gradient descent steps, and a slower algorithm.
+
+- what step size should we use? It is up to you. You should use either constant step size, backtracking line search, or exact line search, as discussed in class.
+
+- how to compute the train/test/validation loss/predictions? You should use the learned weight vector with the given feature matrix, e.g. cbind(1, X.test) %*% W.mat for the test predictions.
+
+- What should I do after scaling the features when there is a feature with no variance (same value for all train observations)? Remove the feature when you do gradient descent, and assign 0 to the corresponding weight for the return value.
+
+- how do I know if the learning algorihm was coded correctly?
+  - 1. for any learning algorithm it should at least be as accurate as the baseline predictor, in terms of test error/accuracy in cross-validation. Baseline is mean of train labels for regression, or most frequent class in train labels for classification.
+  - 2. the train error/loss should always decrease as a function of the model complexity parameter (number of iterations or -penalty).
+  - 3. you can compare your solution with R package glmnet, which also fits L2 regularized linear models (use alpha=0).
+  - 4. for L2 regularized optimization algorithm, you should check if the gradient is (close to) zero -- that is the global optimum.
+
+- how should we write the predict function?
+
+list(predict=function(X.test){
+   ... return a vector of predictions ...
+  })
+
+- how to decide max.iterations? you should choose a large number of iterations so that the validation loss starts increasing. You may need to use a different max.iterations value for each data set.
