@@ -68,7 +68,7 @@ LMSquareLossL2penalties <- function( X.mat, y.vec, penalty.vec ) {
   
   for (i in 1:length(penalty.vec)) {
     warm.weight.vec <- LMSquareLossL2(X.scaled.mat = X.scaled.mat, y.vec = y.vec, penalty = penalty.vec[i], opt.thresh = opt.thresh, initial.weight.vec = warm.weight.vec, step.size = step.size)
-    # W.scaled.mat[, i] <- (t(warm.weight.vec) * sd ^-1)
+    W.scaled.mat[, i] <- warm.weight.vec
     # print('warm.weight.vec')
     # print(warm.weight.vec)    
     # print('sd')
