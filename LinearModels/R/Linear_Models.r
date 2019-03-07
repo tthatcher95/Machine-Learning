@@ -77,8 +77,8 @@ LMSquareLossL2penalties <- function( X.mat, y.vec, penalty.vec ) {
     # print(t(warm.weight.vec) * sd ^-1)    
     }
   
-  W.mat <- (t(W.scaled.mat) * sd^-1)
-  B <- t(W.scaled.mat) * sd^-1 * mean
+  W.mat <- (t(W.scaled.mat) %*% sd^-1)
+  B <- t(W.scaled.mat) %*% sd^-1 %*% mean
   W.unscaled.mat <- (X.mat %*% W.mat) + B
   return(W.unscaled.mat)
 }
