@@ -69,18 +69,14 @@ LMSquareLossL2penalties <- function( X.mat, y.vec, penalty.vec ) {
   for (i in 1:length(penalty.vec)) {
     warm.weight.vec <- LMSquareLossL2(X.scaled.mat = X.scaled.mat, y.vec = y.vec, penalty = penalty.vec[i], opt.thresh = opt.thresh, initial.weight.vec = warm.weight.vec, step.size = step.size)
     W.scaled.mat[, i] <- warm.weight.vec
-    # print('warm.weight.vec')
-    # print(warm.weight.vec)    
-    # print('sd')
-    # print(sd)
-    # print('warm.weight.vec * sd')
-    # print(t(warm.weight.vec) * sd ^-1)    
+
     }
   
-  W.mat <- (t(W.scaled.mat) %*% sd^-1)
-  B <- t(W.scaled.mat) %*% sd^-1 %*% mean
-  W.unscaled.mat <- (X.mat %*% W.mat) + B
-  return(W.unscaled.mat)
+  W.unscaled.mat <- W.scaled.mat/attr(X.scaled.mat, "scaled:scale")
+  B <- -t(W.scaled.mat/ attr(X.scaled.mat, "scaled:scale")) %*% attr(X.scaled.mat, "scaled:center")
+  W.mat = rbind(t(B), W.unscaled.mat)
+  
+  return(W.mat)
 }
 
 
@@ -104,12 +100,6 @@ LMLogisticLossL2penalties <- function( X.mat, y.vec, penalty.vec ) {
   for (i in 1:length(penalty.vec)) {
     warm.weight.vec <- LMLogisticLossL2(X.scaled.mat = X.scaled.mat, y.vec = y.vec, penalty = penalty.vec[i], opt.thresh = opt.thresh, initial.weight.vec = warm.weight.vec, step.size = step.size)
     W.scaled.mat[, i] <- (t(warm.weight.vec) * sd ^-1)
-    # print('warm.weight.vec')
-    # print(warm.weight.vec)
-    # print('sd')
-    # print(sd)
-    # print('warm.weight.vec * sd')
-    # print(t(warm.weight.vec) * sd ^-1)
   }
   
   W.mat <- (t(W.scaled.mat) * sd^-1)
@@ -119,6 +109,44 @@ LMLogisticLossL2penalties <- function( X.mat, y.vec, penalty.vec ) {
 }
 
 
-LMSquareLossL2CV <- function( X.mat, y.vec, fold.vec, penalty.vec ) {
+LMSquareLossL2CV <- function( X.mat, y.vec, fold.vec = NULL, penalty.vec ) {
   
+  if(is.null(fold.vec)) {
+    fold.vec <- sample(rep(1:4, l=nrow(X.mat)))
+  }
+  
+  W.valid <- matrix(NA, length(unique(fold.vec)), length(penalty.vec))
+  for(fold in 1:length(unique(fold.vec))) {
+    fold_data <- which(fold.vec == fold)
+    
+    X.train <- X.mat[-fold_data ,]
+    X.valid <- X.mat[fold_data ,]
+    
+    Y.train <- y.vec[-fold_data]
+    Y.valid <- y.vec[fold_data]
+    
+    W.train <- LMSquareLossL2penalties(X.train, Y.train, penalty.vec)
+    W.valid[fold , ] = colMeans((cbind(1, as.matrix(X.valid)) %*% W.train - Y.valid)^2)
+  }
+
+  mean.validation.loss.vec = colMeans(W.valid)
+  
+  min.valid.mean.index = which(mean.validation.loss.vec == min(mean.validation.loss.vec), arr.ind = TRUE)
+  selected.penalty = penalty.vec[min.valid.mean.index]
+  
+  w.vec = LMSquareLossL2penalties(X.mat, y.vec, selected.penalty)
+  
+  predict <- function(testX.mat){
+    cbind(1, as.matrix(testX.mat)) %*% w.vec
+  }
+  
+  ret <- list(
+    'mean.validation.loss' = mean.validation.loss.vec[min.valid.mean.index],
+    'mean.train.loss.vec' = mean.validation.loss.vec,
+    'penalty.vec' = penalty.vec,
+    'selected.penalty' = selected.penalty,
+    'weight.vec' = w.vec,
+    'predict' = predict
+  )
+  return(ret)
 }
