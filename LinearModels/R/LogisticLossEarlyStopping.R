@@ -1,4 +1,4 @@
-LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step.size=0.35) {
+LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step.size=0.05) {
   x.mat <- scale(x.unsc.mat)
   W.v <- numeric(ncol(x.mat))
   mean.mat <- attr(x.mat, "scaled:center")
@@ -23,7 +23,7 @@ LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step
     #top = (-y.vec %*% x.mat)
     #bottom = 1 + exp(-y.vec * t(W.v) %*% x.mat)
     # -t(x.mat * y.vec)
-    gradient <- -t(x.mat) %*% diag(y.vec) %*% (-1/(1 + exp((y.vec * x.mat %*% W.v))))
+    gradient <- -t(x.mat) %*% diag(y.vec) %*% (1/(1 + exp(-(diag(y.vec) %*% x.mat %*% W.v))))
     W.v <- W.v - step.size * gradient
     W.mat[, iteration] <- W.v
     
@@ -55,14 +55,18 @@ LMLogisticLossEarlyStoppingCV<- function(X.mat, y.vec, fold.vec=NULL, max.iterat
     Y.valid <- y.vec[fold_data]
     
     W.train <- LMLogisticLossIterations(X.train, Y.train, max.iterations, step.size)
+    
     W.valid[fold , ] = colMeans((cbind(1, as.matrix(X.valid)) %*% W.train - Y.valid)^2)
     
   }
   
   mean.valid.vec = colMeans(W.valid)
-  print(which(mean.valid.vec == min(mean.valid.vec), arr.ind = TRUE))
+  
+  print(mean.valid.vec)
   min.valid.mean = which(mean.valid.vec == min(mean.valid.vec), arr.ind = TRUE)
+  
   selected.steps = min.valid.mean
+  print(selected.steps)
   
   w.vec <- LMLogisticLossIterations(X.mat, y.vec, selected.steps, step.size)[, selected.steps]
   
@@ -79,8 +83,8 @@ data = ElemStatLearn::ozone
 
 x.unsc.mat <- data[,-1]
 y.vec <-data[,1]
-max.iterations=10
-step.size=0.35
+max.iterations=30
+step.size=0.002
 
-LMLogisticLossIterations(x.unsc.mat, y.vec)
-fitLog <- LMLogisticLossEarlyStoppingCV(x.unsc.mat, y.vec)
+fitLog <- LMLogisticLossEarlyStoppingCV(x.unsc.mat, y.vec, NULL, max.iterations, step.size)
+
