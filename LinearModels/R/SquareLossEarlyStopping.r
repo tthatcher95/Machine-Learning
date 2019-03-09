@@ -138,7 +138,6 @@ step.size=0.35
 fit <- LMSquareLossEarlyStoppingCV(x.unsc.mat, y.vec)
 
 
-=======
 #' LMSquareLossIterations
 #'
 #' @param x.unsc.mat An unscaled feature matrix [n x p]
