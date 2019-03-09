@@ -1,4 +1,4 @@
-#' Title
+#' LMSquareLossIterations
 #'
 #' @param x.unsc.mat
 #' An unscaled feature matrix
@@ -52,7 +52,7 @@ LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size)
   return(W.out)
 }
 
-#' Title
+#' LMSquareLossEarlyStoppingCV
 #'
 #' @param x.unsc.mat
 #' An unscaled feature matrix

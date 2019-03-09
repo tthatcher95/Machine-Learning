@@ -1,4 +1,4 @@
-#' Title
+#' LMLogisticLossIterations
 #'
 #' @param x.unsc.mat
 #' An unscaled feature matrix
@@ -61,7 +61,7 @@ LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step
   return(W.out)
 }
 
-#' Title
+#' LMLogisticLossEarlyStoppingCV
 #'
 #' @param x.unsc.mat
 #' An unscaled feature matrix
