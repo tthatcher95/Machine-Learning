@@ -104,8 +104,36 @@ test_that("LMSquareLossL2CV correct return dimensions", {
   fold.vec <- sample(rep(1:4, l=nrow(X.mat)))
   penalty.vec <- seq(10, 1, by=-0.5)
   ret <- LMSquareLossL2CV(X.mat, y.vec, fold.vec, penalty.vec)
-  expect_equal(ncol(ret), length(penalty.vec.mat))
-  
+  expect_equal(ncol(X.mat), length(ret$weight.vec))
 })
 
 
+test_that("LMSquareLossL2CV stops on incorrect input", {
+  data(ozone, package="ElemStatLearn")
+  X.mat <- ozone[, 2:ncol(ozone)]
+  y.vec <- ozone[, "ozone"]
+  fold.vec <- sample(rep(1:4, l=nrow(X.mat)))
+  penalty.vec <- seq(1, 10, by=0.5)
+  expect_error(LMSquareLossL2CV(X.mat, y.vec, fold.vec, penalty.vec))
+})
+
+
+test_that("LMLogisticLossL2CV correct return dimensions", {
+  data(spam, package="ElemStatLearn")
+  X.mat.binary <- spam[,1:ncol(spam) -1]
+  y.vec.label <- spam[,'spam']
+  y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0 )
+  penalty.vec <- seq(10, 1, by=-0.5)
+  ret <- LMLogisticLossL2CV(X.mat.binary, y.vec.binary, fold.vec, penalty.vec)
+  expect_equal(ncol(X.mat.binary), length(ret$weight.vec))
+})
+
+
+test_that("LMLogisticLossL2CV stops on incorrect input", {
+  data(spam, package="ElemStatLearn")
+  X.mat.binary <- spam[,1:ncol(spam) -1]
+  y.vec.label <- spam[,'spam']
+  y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0 )
+  penalty.vec <- seq(1, 10, by=0.5)
+  expect_error(LMLogisticLossL2CV(X.mat.binary, y.vec.binary, fold.vec, penalty.vec))
+})
