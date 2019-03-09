@@ -16,7 +16,7 @@
 #' max.iterations=50
 #' step.size=1
 #' W.train <- LMLogisticLossIterations(X.train, Y.train, max.iterations, step.size)
-#' cbind(1, X.mat) %*% W.mat -- Returns the matrix of predictions
+#' cbind(1, X.mat) %*% W.mat
 
 LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step.size=0.05) {
   x.mat <- scale(x.unsc.mat)
@@ -84,10 +84,10 @@ LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step
 #' max.iterations=50
 #' step.size=0.001
 #' fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
-#' fitLog$predict(any_x_matrix) -- Returns matrix of predictions
-#' fitLog$mean.valid.vec -- Returns the Mean Vector ran from the Cross Validation on the Validation set
-#' fitLog$selected.steps -- Returns the optimal number of steps from CV
-#' fitLog$w.vec -- Returns the weight vector learned from the training set
+#' fitLog$predict(x.mat.binary)
+#' fitLog$mean.valid.vec
+#' fitLog$selected.steps
+#' fitLog$w.vec
 
 LMLogisticLossEarlyStoppingCV<- function(X.mat, y.vec, fold.vec=NULL, max.iterations=100, step.size=0.35) {
   
