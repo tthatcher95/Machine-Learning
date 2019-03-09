@@ -1,24 +1,22 @@
 #' LMLogisticLossIterations
 #'
-#' @param x.unsc.mat
-#' An unscaled feature matrix
-#' @param y.vec 
-#' A vector of predictions
-#' @param max.iterations
-#' The number of times to step through your gradient descent 
-#' @param step.size 
-#' The size of the step to take during gradient descent
+#' @param x.unsc.mat An unscaled feature matrix [n x p]
+#' @param y.vec A vector of predictions [p x 1]
+#' @param max.iterations The number of times to step through your gradient descent [scalar] 
+#' @param step.size The size of the step to take during gradient descent [scalar]
 #'
-#' @return
-#' A unscaled weight matrix (W.out) which you can use to get a matrix of predictions (probabilities)
-#' With the Beta/Intercept term as the first row
+#' @return A unscaled weight matrix [max.iterations x p]
 #' @export
 #'
 #' @examples
+#' data(spam, package="ElemStatLearn")
+#' X.mat.binary <- spam[,1:ncol(spam) -1]
+#' y.vec.label <- spam[,'spam']
+#' y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0)
+#' max.iterations=50
+#' step.size=1
 #' W.train <- LMLogisticLossIterations(X.train, Y.train, max.iterations, step.size)
 #' cbind(1, X.mat) %*% W.mat -- Returns the matrix of predictions
-
-
 
 LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step.size=0.05) {
   x.mat <- scale(x.unsc.mat)
@@ -41,12 +39,7 @@ LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step
   W.mat = matrix(NA, ncol(x.mat), max.iterations)
   W.mat[, 1] <- W.v
   
-  for(iteration in 2:max.iterations) {
-    #top = (-y.vec %*% x.mat)
-    #bottom = 1 + exp(-y.vec * t(W.v) %*% x.mat)
-    # -t(x.mat * y.vec)
-    y.vec[y.vec == 1] <- -1
-    y.vec[y.vec == 0] <- 1
+  for(iteration in 1:max.iterations) {
     gradient <- -t(x.mat) %*% diag(y.vec) %*% (1/(1 + exp(-(diag(y.vec) %*% x.mat %*% W.v))))
     W.v <- W.v - step.size * gradient
     W.mat[, iteration] <- W.v
@@ -56,6 +49,7 @@ LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step
   W.orig.mat = W.mat/attr(x.mat, "scaled:scale")
   intercept = -t(W.mat/ attr(x.mat, "scaled:scale")) %*% attr(x.mat, "scaled:center")
   W.out = rbind(t(intercept), W.orig.mat)
+  
   # Test to make sure unscaling works
   #print(all.equal(x.mat %*% W.mat, cbind(1, as.matrix(x.unsc.mat)) %*% W.out))
   return(W.out)
@@ -63,27 +57,28 @@ LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step
 
 #' LMLogisticLossEarlyStoppingCV
 #'
-#' @param x.unsc.mat
-#' An unscaled feature matrix
-#' @param y.vec 
-#' A vector of predictions
-#' @param fold.vec
-#' A vector of FoldID to pass for the cross-validation data split
-#' @param max.iterations
-#' The number of times to step through your gradient descent 
-#' @param step.size 
-#' The size of the step to take during gradient descent
+#' @param x.unsc.mat An unscaled feature matrix [n x p]
+#' @param y.vec A vector of predictions [p x 1]
+#' @param fold.vec A vector of FoldID to pass for the cross-validation data split [p x 1]
+#' @param max.iterations The number of times to step through your gradient descent [scalar]
+#' @param step.size The size of the step to take during gradient descent [scalar]
 #'
-#' @return
-#' A list comprised of: mean.valid.vec, selected.steps, w.vec, and a function predict()
+#' @return A list comprised of: mean.valid.vec [max.iterations x 1], selected.steps, w.vec [n x 1], and a function predict()
 #' @export
 #'
 #' @examples
+#' data(spam, package="ElemStatLearn")
+#' X.mat.binary <- spam[,1:ncol(spam) -1]
+#' y.vec.label <- spam[,'spam']
+#' y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0)
+#' max.iterations=50
+#' step.size=0.001
 #' fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
 #' fitLog$predict(any_x_matrix) -- Returns matrix of predictions
 #' fitLog$mean.valid.vec -- Returns the Mean Vector ran from the Cross Validation on the Validation set
 #' fitLog$selected.steps -- Returns the optimal number of steps from CV
 #' fitLog$w.vec -- Returns the weight vector learned from the training set
+
 LMLogisticLossEarlyStoppingCV<- function(X.mat, y.vec, fold.vec=NULL, max.iterations=100, step.size=0.35) {
   
   if(is.null(fold.vec)) {
@@ -117,14 +112,15 @@ LMLogisticLossEarlyStoppingCV<- function(X.mat, y.vec, fold.vec=NULL, max.iterat
   w.vec <- LMLogisticLossIterations(X.mat, y.vec, selected.steps, step.size)[, selected.steps]
   
   list(
-    mean.valid.vec,
-    selected.steps,
-    w.vec,
-    predict=function(testX.mat){
-      cbind(1, as.matrix(testX.mat)) %*% w.vec
-    }
+      mean.valid.vec=mean.valid.vec,
+      selected.steps=selected.steps,
+      w.vec=w.vec,
+      predict=function(testX.mat){
+        cbind(1, as.matrix(testX.mat)) %*% w.vec
+      }
   )
 }
+
 data(spam, package="ElemStatLearn")
 X.mat.binary <- spam[,1:ncol(spam) -1]
 y.vec.label <- spam[,'spam']
@@ -132,5 +128,5 @@ y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0)
 max.iterations=50
 step.size=0.001
 
-fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
+# fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
 
