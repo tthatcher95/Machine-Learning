@@ -1,0 +1,95 @@
+---
+title: "Linear Models Report"
+author: "Tyler Thatcher"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Linear Models Report}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+  
+  ```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+# Binary Data
+data(spam, package="ElemStatLearn")
+data(zip.train, package="ElemStatLearn")
+data(SAheart, package="ElemStatLearn")
+
+# Regression Data
+data(prostate, package="ElemStatLearn")
+data(ozone, package="ElemStatLearn")
+
+str(spam)
+str(zip.train)
+str(SAheart)
+str(prostate)
+str(ozone)
+
+is.01 <- zip.train[, 1] %in% c(0,1)
+
+log.data.list <- list(
+  spam=list(
+    features=as.matrix(spam[, 1:57]),
+    labels=ifelse(spam$spam=="spam", 1, 0)),
+  zip.train=list(
+    features=zip.train[is.01, -1],
+    labels=as.integer(zip.train[is.01, 1])),
+  SAheart=list(
+    features=as.matrix(SAheart[, 1:9]),
+    labels=as.matrix(SAheart[, 10]))
+  )
+
+reg.data.list <- list(
+  prostate=list(
+    features=as.matrix(prostate[, 1:8]),
+    labels=as.matrix(prostate[, 9]),
+  ozone=list(
+    features=ozone[, -1],
+    labels=as.integer(ozone[, 1]))
+))
+
+str(log.data.list)
+str(reg.data.list)
+
+n.folds <- 4
+results.list <- list()
+mean.loss.list <- list()
+for(data.name in names(reg.data.list)){
+  data.set <- reg.data.list[[data.name]]
+  str(data.set)
+  stopifnot(all(data.set$labels %in% c(0,1)))
+  stopifnot(length(data.set$labels) == nrow(data.set$features))
+  set.seed(1)
+  fold.vec <- sample(rep(1:n.folds, l=nrow(data.set$features)))
+  str(fold.vec)
+  result.mat.list <- list()
+  for(test.fold in 1:n.folds){
+    is.test <- fold.vec == test.fold
+    is.train <- !is.test
+    X.train <- data.set$features[is.train,]
+    y.train <- data.set$labels[is.train]
+    baseline <- mean(y.train)
+    LogCV <- LinearModels::LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL,    max.iterations, step.size)
+    LinCV <- LinearModels::LMSquareLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
+    LogL2CV <- LinearModels::LMLogisticLossL2CV(X.mat.binary, y.vec.binary, fold.vec, penalty.vec)
+    LinL2CV <- LinearModels::LMSquareLossL2CV(X.mat, y.vec, fold.vec, penalty.vec)
+
+    str(fit)
+
+  }
+  do.call(rbind, result.mat.list)
+}
+```
+
+## Analysis of spam data set
+
+
+
+## Analysis of zip.train data set

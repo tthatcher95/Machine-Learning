@@ -76,7 +76,7 @@ LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size)
 #' y.vec <-data[,1]
 #' max.iterations=10
 #' step.size=0.35
-#' fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
+#' fitLog <- LMSquareLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
 #' fitLog$predict(x.unsc.mat)
 #' fitLog$mean.valid.vec
 #' fitLog$selected.steps
