@@ -133,13 +133,3 @@ LMLogisticLossEarlyStoppingCV<- function(X.mat, y.vec, fold.vec=NULL, max.iterat
       }
   )
 }
-
-# data(spam, package="ElemStatLearn")
-# X.mat.binary <- spam[,1:ncol(spam) -1]
-# y.vec.label <- spam[,'spam']
-# y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0)
-# max.iterations=50
-# step.size=0.001
-
-# fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
-
