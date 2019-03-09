@@ -17,11 +17,21 @@
 #' cbind(1, X.mat) %*% W.mat -- Returns the matrix of predictions 
 
 LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size) {
-  
   x.mat <- scale(x.unsc.mat)
   W.v <- numeric(ncol(x.mat))
   mean.mat <- attr(x.mat, "scaled:center")
   sd.mat <- attr(x.mat, "scaled:scaled")
+  
+  if( length(y.vec) != nrow(x.unsc.mat) ){
+    stop("y.vec and X.unsc.mat should have the same number of rows")
+  }
+  if( length(W.v) != ncol(x.unsc.mat) ){
+    stop("W.v should have a row for every feature in X.unsc.mat")
+  }
+  if( step.size <= 0 ){
+    stop("step.size should be greater than 0")
+  }
+  
   
   # R Scaling/Filtering
   ## Filters out variablity == 0
@@ -73,6 +83,10 @@ LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size)
 #' fitLog$w.vec -- Returns the weight vector learned from the training set
 
 LMSquareLossEarlyStoppingCV<- function(X.mat, y.vec, fold.vec=NULL, max.iterations=100, step.size=0.35) {
+  
+  if( length(y.vec) != nrow(X.mat) ){
+    stop("y.vec and X.mat should have the same number of rows")
+  }
   
   if(is.null(fold.vec)) {
     fold.vec <- sample(rep(1:4, l=nrow(X.mat)))
