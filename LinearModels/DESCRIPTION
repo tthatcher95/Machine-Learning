@@ -1,12 +1,17 @@
 Package: LinearModels
 Type: Package
-Title: Linear Models
+Title: LinearModels
 Version: 2019.02.14
 Author: Cole Neubauer
 Maintainer: Cole Neubauer <cole@nau.edu>
-Description: Linear Models with square and logistic loss
+Description: Linear Models with square and logistic loss.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-LinkingTo: RcppEigen
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
+Imports: data.table
+Suggests: ggplot2,
+    knitr,
+    rmarkdown,
+    ElemStatLearn
+VignetteBuilder: knitr
