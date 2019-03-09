@@ -77,6 +77,8 @@ for(data.name in names(reg.data.list)){
     y.train <- data.set$labels[is.train]
     baseline <- mean(y.train)
     fit <- LinearModels::LMLogisticLossEarlyStoppingCV(X.train, y.train, fold.vec, 100, 0.35)
+    fit <- LinearModels::LMLogisticLossEarlyStoppingCV(X.train, y.train, fold.vec, 100, 0.35)
+
     str(fit)
     mean.loss.list[[paste(data.name, test.fold)]] <- fit$mean.loss$mean.loss
     pred.prob.list <- list(

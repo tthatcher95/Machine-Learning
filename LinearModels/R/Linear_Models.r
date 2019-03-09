@@ -13,17 +13,17 @@
 #' @export
 #'
 #' @examples
-#  data(ozone, package="ElemStatLearn")
-#  penalty <- 5
-#  X.mat <- ozone[, 2:ncol(ozone)]
-#  y.vec <- ozone[, "ozone"]
-#  mean <- apply(X.mat, 2, mean)
-#  sd <- apply(X.mat, 2, sd)
-#  X.scaled.mat <- scale(X.mat, center = mean, scale = sd)
-#  opt.thresh <- 0.005
-#  step.size = 0.0001
-#  initial.weight.vec <- integer(ncol(X.scaled.mat))
-#  LMSquareLossL2(X.scaled.mat, y.vec, penalty, opt.thresh, initial.weight.vec, step.size)
+#' data(ozone, package="ElemStatLearn")
+#' penalty <- 5
+#' X.mat <- ozone[, 2:ncol(ozone)]
+#' y.vec <- ozone[, "ozone"]
+#' mean <- apply(X.mat, 2, mean)
+#' sd <- apply(X.mat, 2, sd)
+#' X.scaled.mat <- scale(X.mat, center = mean, scale = sd)
+#' opt.thresh <- 0.005
+#' step.size = 0.0001
+#' initial.weight.vec <- integer(ncol(X.scaled.mat))
+#' LMSquareLossL2(X.scaled.mat, y.vec, penalty, opt.thresh, initial.weight.vec, step.size)
 LMSquareLossL2 <- function( X.scaled.mat, y.vec, penalty, opt.thresh, initial.weight.vec, step.size ) {
   if( length(y.vec) != nrow(X.scaled.mat) ){
     stop("y.vec and X.scaled.mat should have the same number of rows")
@@ -76,14 +76,14 @@ LMSquareLossL2 <- function( X.scaled.mat, y.vec, penalty, opt.thresh, initial.we
 #' @export
 #'
 #' @examples
-# data(spam, package="ElemStatLearn")
-# X.mat.binary <- spam[,1:ncol(spam) -1]
-# y.vec.label <- spam[,'spam']
-# y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0 )
-# penalty <- 5
-# mean <- apply(X.mat.binary, 2, mean)
-# sd <- apply(X.mat.binary, 2, sd)
-# X.scaled.mat <- scale(X.mat.binary, center = mean, scale = sd)
+#' data(spam, package="ElemStatLearn")
+#' X.mat.binary <- spam[,1:ncol(spam) -1]
+#' y.vec.label <- spam[,'spam']
+#' y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0 )
+#' penalty <- 5
+#' mean <- apply(X.mat.binary, 2, mean)
+#' sd <- apply(X.mat.binary, 2, sd)
+#' X.scaled.mat <- scale(X.mat.binary, center = mean, scale = sd)
 #' opt.thresh <- 0.005
 #' step.size = 0.1
 #' initial.weight.vec <- integer(ncol(X.scaled.mat))
