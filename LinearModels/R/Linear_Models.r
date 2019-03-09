@@ -255,7 +255,7 @@ LMLogisticLossL2penalties <- function( X.mat, y.vec, penalty.vec ) {
 #' penalty.vec <- seq(10, 1, by=-0.5)
 #' LMSquareLossL2CV(X.mat, y.vec, fold.vec, penalty.vec)
 LMSquareLossL2CV <- function( X.mat, y.vec, fold.vec = NULL, penalty.vec ) {
-  if( length(y.vec) != nrow(X.scaled.mat) ){
+  if( length(y.vec) != nrow(X.mat) ){
     stop("y.vec and X.scaled.mat should have the same number of rows")
   }
   if( all(diff(penalty.vec) >= 0) ){
@@ -323,7 +323,7 @@ LMSquareLossL2CV <- function( X.mat, y.vec, fold.vec = NULL, penalty.vec ) {
 #' penalty.vec <- seq(10, 1, by=-0.5)
 #' LMLogisticLossL2CV(X.mat.binary, y.vec.binary, fold.vec, penalty.vec)
 LMLogisticLossL2CV <- function( X.mat, y.vec, fold.vec = NULL, penalty.vec ) {
-  if( length(y.vec) != nrow(X.scaled.mat) ){
+  if( length(y.vec) != nrow(X.mat) ){
     stop("y.vec and X.scaled.mat should have the same number of rows")
   }
   if( all(diff(penalty.vec) >= 0) ){

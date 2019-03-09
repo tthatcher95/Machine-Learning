@@ -62,7 +62,7 @@ LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size)
 
 #' LMSquareLossEarlyStoppingCV
 #'
-#' @param x.unsc.mat An unscaled feature matrix [n x p]
+#' @param X.mat An unscaled feature matrix [n x p]
 #' @param y.vec A vector of predictions [p x 1]
 #' @param fold.vec A vector of FoldID to pass for the cross-validation data split [p x 1]
 #' @param max.iterations The number of times to step through your gradient descent 
@@ -72,8 +72,8 @@ LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size)
 #' @export
 #'
 #' @examples
-#' x.unsc.mat <- data[,-1]
-#' y.vec <-data[,1]
+#' X.mat.binary <- data[,-1]
+#' y.vec.binary <-data[,1]
 #' max.iterations=10
 #' step.size=0.35
 #' fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
