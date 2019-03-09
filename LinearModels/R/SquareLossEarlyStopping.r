@@ -14,14 +14,24 @@
 #' max.iterations=10
 #' step.size=0.35
 #' W.train <- LMLogisticLossIterations(X.train, Y.train, max.iterations, step.size)
-#' cbind(1, X.mat) %*% W.mat -- Returns the matrix of predictions 
+#' cbind(1, X.mat) %*% W.mat
 
 LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size) {
-  
   x.mat <- scale(x.unsc.mat)
   W.v <- numeric(ncol(x.mat))
   mean.mat <- attr(x.mat, "scaled:center")
   sd.mat <- attr(x.mat, "scaled:scaled")
+  
+  if( length(y.vec) != nrow(x.unsc.mat) ){
+    stop("y.vec and X.unsc.mat should have the same number of rows")
+  }
+  if( length(W.v) != ncol(x.unsc.mat) ){
+    stop("W.v should have a row for every feature in X.unsc.mat")
+  }
+  if( step.size <= 0 ){
+    stop("step.size should be greater than 0")
+  }
+  
   
   # R Scaling/Filtering
   ## Filters out variablity == 0
@@ -67,12 +77,16 @@ LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size)
 #' max.iterations=10
 #' step.size=0.35
 #' fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
-#' fitLog$predict(any_x_matrix) -- Returns matrix of predictions
-#' fitLog$mean.valid.vec -- Returns the Mean Vector ran from the Cross Validation on the Validation set
-#' fitLog$selected.steps -- Returns the optimal number of steps from CV
-#' fitLog$w.vec -- Returns the weight vector learned from the training set
+#' fitLog$predict(x.unsc.mat)
+#' fitLog$mean.valid.vec
+#' fitLog$selected.steps
+#' fitLog$w.vec
 
 LMSquareLossEarlyStoppingCV<- function(X.mat, y.vec, fold.vec=NULL, max.iterations=100, step.size=0.35) {
+  
+  if( length(y.vec) != nrow(X.mat) ){
+    stop("y.vec and X.mat should have the same number of rows")
+  }
   
   if(is.null(fold.vec)) {
     fold.vec <- sample(rep(1:4, l=nrow(X.mat)))
