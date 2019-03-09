@@ -67,7 +67,7 @@ LMLogisticLossIterations <- function(x.unsc.mat, y.vec, max.iterations=100, step
 
 #' LMLogisticLossEarlyStoppingCV
 #'
-#' @param x.unsc.mat An unscaled feature matrix [n x p]
+#' @param X.mat An unscaled feature matrix [n x p]
 #' @param y.vec A vector of predictions [p x 1]
 #' @param fold.vec A vector of FoldID to pass for the cross-validation data split [p x 1]
 #' @param max.iterations The number of times to step through your gradient descent [scalar]
@@ -134,12 +134,12 @@ LMLogisticLossEarlyStoppingCV<- function(X.mat, y.vec, fold.vec=NULL, max.iterat
   )
 }
 
-data(spam, package="ElemStatLearn")
-X.mat.binary <- spam[,1:ncol(spam) -1]
-y.vec.label <- spam[,'spam']
-y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0)
-max.iterations=50
-step.size=0.001
+# data(spam, package="ElemStatLearn")
+# X.mat.binary <- spam[,1:ncol(spam) -1]
+# y.vec.label <- spam[,'spam']
+# y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0)
+# max.iterations=50
+# step.size=0.001
 
 # fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
 

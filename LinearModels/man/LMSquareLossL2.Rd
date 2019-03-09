@@ -26,3 +26,16 @@ numeric scaled optimal weight vector for the given penalty [p]
 \description{
 This function attempts to minimize the Loss function [f(x) - y]^2. Where f(x) is the resulting prediction values of x and y are truth values.
 }
+\examples{
+data(ozone, package="ElemStatLearn")
+penalty <- 5
+X.mat <- ozone[, 2:ncol(ozone)]
+y.vec <- ozone[, "ozone"]
+mean <- apply(X.mat, 2, mean)
+sd <- apply(X.mat, 2, sd)
+X.scaled.mat <- scale(X.mat, center = mean, scale = sd)
+opt.thresh <- 0.005
+step.size = 0.0001
+initial.weight.vec <- integer(ncol(X.scaled.mat))
+LMSquareLossL2(X.scaled.mat, y.vec, penalty, opt.thresh, initial.weight.vec, step.size)
+}

@@ -27,6 +27,14 @@ numeric scaled optimal weight vector for the given penalty [p]
 This function attempts to minimize the Loss function log[1 + exp(-YXw)]
 }
 \examples{
+data(spam, package="ElemStatLearn")
+X.mat.binary <- spam[,1:ncol(spam) -1]
+y.vec.label <- spam[,'spam']
+y.vec.binary <- ifelse(y.vec.label == 'spam', 1, 0 )
+penalty <- 5
+mean <- apply(X.mat.binary, 2, mean)
+sd <- apply(X.mat.binary, 2, sd)
+X.scaled.mat <- scale(X.mat.binary, center = mean, scale = sd)
 opt.thresh <- 0.005
 step.size = 0.1
 initial.weight.vec <- integer(ncol(X.scaled.mat))
