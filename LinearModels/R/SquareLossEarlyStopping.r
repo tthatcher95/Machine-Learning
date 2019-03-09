@@ -1,3 +1,23 @@
+#' Title
+#'
+#' @param x.unsc.mat
+#' An unscaled feature matrix
+#' @param y.vec 
+#' A vector of predictions
+#' @param max.iterations
+#' The number of times to step through your gradient descent 
+#' @param step.size 
+#' The size of the step to take during gradient descent
+#'
+#' @return
+#' A unscaled weight matrix (W.out) which you can use to get a matrix of predictions (real numbers)
+#' With the Beta/Intercept term as the first row
+#' @export
+#'
+#' @examples
+#' W.train <- LMLogisticLossIterations(X.train, Y.train, max.iterations, step.size)
+#' cbind(1, X.mat) %*% W.mat -- Returns the matrix of predictions 
+#'
 LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size) {
   
   x.mat <- scale(x.unsc.mat)
@@ -31,6 +51,30 @@ LMSquareLossIterations <- function(x.unsc.mat, y.vec, max.iterations, step.size)
   W.out = rbind(t(intercept), W.orig.mat)
   return(W.out)
 }
+
+#' Title
+#'
+#' @param x.unsc.mat
+#' An unscaled feature matrix
+#' @param y.vec 
+#' A vector of predictions
+#' @param fold.vec
+#' A vector of FoldID to pass for the cross-validation data split
+#' @param max.iterations
+#' The number of times to step through your gradient descent 
+#' @param step.size 
+#' The size of the step to take during gradient descent
+#'
+#' @return
+#' A list comprised of: mean.valid.vec, selected.steps, w.vec, and a function predict()
+#' @export
+#'
+#' @examples
+#' fitLog <- LMLogisticLossEarlyStoppingCV(X.mat.binary, y.vec.binary, NULL, max.iterations, step.size)
+#' fitLog$predict(any_x_matrix) -- Returns matrix of predictions
+#' fitLog$mean.valid.vec -- Returns the Mean Vector ran from the Cross Validation on the Validation set
+#' fitLog$selected.steps -- Returns the optimal number of steps from CV
+#' fitLog$w.vec -- Returns the weight vector learned from the training set
 
 LMSquareLossEarlyStoppingCV<- function(X.mat, y.vec, fold.vec=NULL, max.iterations=100, step.size=0.35) {
   
